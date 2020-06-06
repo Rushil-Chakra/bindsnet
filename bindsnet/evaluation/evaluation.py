@@ -224,7 +224,7 @@ def  vfa(
     proportions[proportions != proportions] = 0  # Set NaNs to 0
 
     votes = torch.matmul(spikes, proportions)
-    predictions = torch.sort(votes, dim=1, descending=True)[1][:. 0]
+    predictions = torch.sort(votes, dim=1, descending=True)[1][:, 0]
     
     return proportions, rates
 
