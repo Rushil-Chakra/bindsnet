@@ -104,7 +104,7 @@ class Network(torch.nn.Module):
 
         self.dt = dt
         self.batch_size = batch_size
-
+        self.learning = learning
         self.layers = {}
         self.connections = {}
         self.monitors = {}
@@ -242,6 +242,7 @@ class Network(torch.nn.Module):
         inputs: Dict[str, torch.Tensor],
         time: int,
         one_step=False,
+        label: Optional[int]=None,
         **kwargs
     ) -> None:
         # language=rst
@@ -307,6 +308,7 @@ class Network(torch.nn.Module):
         masks = kwargs.get("masks", {})
         injects_v = kwargs.get("injects_v", {})
 
+        self.label = label
         # Compute reward.
         if self.reward_fn is not None:
             kwargs["reward"] = self.reward_fn.compute(**kwargs)
@@ -389,7 +391,7 @@ class Network(torch.nn.Module):
             # Run synapse updates.
             for c in self.connections:
                 self.connections[c].update(
-                    mask=masks.get(c, None), learning=self.learning, **kwargs
+                    mask=masks.get(c, None), learning=self.learning, label=self.label, **kwargs
                 )
 
             # Record state variables of interest.

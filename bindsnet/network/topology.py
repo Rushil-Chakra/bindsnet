@@ -97,7 +97,7 @@ class AbstractConnection(ABC, Module):
         :param ByteTensor mask: Boolean mask determining which weights to clamp to zero.
         """
         learning = kwargs.get("learning", True)
-
+        label = kwargs.get('label', None)
         if learning:
             self.update_rule.update(**kwargs)
 
@@ -127,6 +127,7 @@ class Connection(AbstractConnection):
         nu: Optional[Union[float, Sequence[float]]] = None,
         reduction: Optional[callable] = None,
         weight_decay: float = 0.0,
+        label: Optional[int] = None,
         **kwargs
     ) -> None:
         # language=rst
